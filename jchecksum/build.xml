@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="jar" name="jchecksum">
+
+    <!--  
+     set global properties for this build 
+      -->
+      
+    <property name="progetto" value="JChecksum"/>
+
+    <property name="base.dir" value="."/>
+    <property name="classpath" value="${base.dir}/lib"/>
+    <property name="src" value="${base.dir}/src"/>
+    <property name="dest" value="${basedir}/classes"/>
+    <property name="dist" value="${basedir}/lib"/>
+    <property name="javadoc" value="${basedir}/doc"/>
+    <property name="list" value=""/>
+
+
+    <target name="init">
+
+        <!--  
+         Create the build directory structure used by compile 
+          -->
+        <mkdir dir="${dest}"/>
+		<mkdir dir="${dist}"/>
+    </target>
+
+    <target depends="init" name="compile">
+        <!--
+         Compile the java code from ${src} into ${dest} 
+          -->
+        <javac debug="on" destdir="${dest}" failonerror="true" includes="${list}" optimize="on" srcdir="${src}" deprecation="on">
+          <classpath>
+            <fileset dir="${classpath}">
+              <include name="**/*.jar"/>
+            </fileset>
+          </classpath>
+        </javac>
+    </target>
+
+    <target name="clean">
+
+        <!--  
+         Delete the ${dest} and ${dist} directory tree 
+          -->
+        <delete dir="${dest}"/>
+        <delete dir="${dist}"/>
+    </target>
+
+    <target depends="compile" name="jar">
+
+        <!--  
+         Create the distribution directory 
+          -->
+        <mkdir dir="${dist}"/>
+
+        <!--  
+         Put everything in ${dist} into the gw.jar file 
+          -->
+        <jar basedir="${dest}" jarfile="${dist}/${progetto}.jar" manifest="src/manifest"/>
+    </target>
+    
+	<target name="javadoc" depends="init">
+    	<mkdir dir="${javadoc}" />
+    	
+    	<javadoc
+    		destdir="${javadoc}"
+    		use="true"
+    		verbose="yes"
+    		packagenames="*"
+    		sourcepath="${src}"
+    		windowtitle="Filippetti Commons">
+    	
+			<classpath>
+				<fileset dir="${classpath}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			
+		</javadoc>
+    </target>
+
+
+    <target depends="clean, compile" name="rebuild"/>
+ 
+</project>

@@ -1,0 +1,1 @@
+start java -cp classes JChecksum
